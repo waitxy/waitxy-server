@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds">
+    <!--定义日志文件的存储地址 -->
+    <property name="LOG_HOME" value="/home/pro/logs"/>
+    <property name="WAITXY_LOG_WX" value="waitxy-wx"/>
+    <!-- scan为true的时候，修改后自动加载 ;scanPeriod为60 seconds的时候，设置默认时间间隔,一分钟加载一次 -->
+    <!-- ContextInitializer 这个类中写了自动寻找的路径是classpath下边的：logback.xml这个文件，所以放到这个目录下边的时候，会自动加载的 -->
+    <!-- https://blog.csdn.net/ITxiaobaibai/article/details/90369313 -->
+    <appender class="ch.qos.logback.core.ConsoleAppender"
+              name="stdout">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <encoder>
+            <!-- 彩色日志 -->
+            <!-- <pattern>%yellow(%d) %highlight(%p) %magenta([%thread]) %green((%file:%line\))
+                %m%n</pattern> -->
+            <pattern>%d %p [%thread] (%file:%line\)- %m%n</pattern>
+        </encoder>
+    </appender>
+    <!-- 一般信息按照每天生成日志文件 -->
+    <appender name="wxinfoLog"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <File>${LOG_HOME}/${WAITXY_LOG_WX}.out</File>
+        <rollingPolicy
+                class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${WAITXY_LOG_WX}/${WAITXY_LOG_WX}_log_info.%d.%i.out</fileNamePattern>
+            <maxHistory>5</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <encoder>
+            <pattern>
+                %d %p [%thread] (%logger:%line\) %m%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+    <!-- 日志输出级别 这样设置不打印日志 -->
+    <!-- <root level="DEBUG">
+         <appender-ref ref="stdout"/>
+         <appender-ref ref="wxinfoLog"/>
+     </root>-->
+    <!--控制台日志-->
+    <logger name="com.waitxy">
+        <appender-ref ref="stdout"/>
+    </logger>
+    <!--MES下日志-->
+    <logger name="com.waitxy" level="INFO">
+        <!-- 引用自定义的appender -->
+        <appender-ref ref="wxinfoLog"/>
+    </logger>
+
+</configuration>

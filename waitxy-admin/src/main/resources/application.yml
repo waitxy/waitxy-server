@@ -1,0 +1,108 @@
+# 开发环境配置
+server:
+  # 服务器的HTTP端口，默认为7500
+  port: 7500
+  servlet:
+    # 应用的访问路径
+    context-path: /
+  tomcat:
+    # tomcat的URI编码
+    uri-encoding: UTF-8
+    # tomcat最大线程数，默认为200
+    max-threads: 800
+    # Tomcat启动初始化的线程数，默认值25
+    min-spare-threads: 30
+
+# 日志配置
+logging:
+  level:
+    com.waitxy: debug
+    org.springframework: warn
+
+# Spring配置
+spring:
+  # 资源信息
+  messages:
+    # 国际化资源文件路径
+    basename: i18n/messages
+  profiles:
+    active: druid
+  # 文件上传
+  servlet:
+    multipart:
+      # 单个文件大小
+      max-file-size: 10MB
+      # 设置总上传的文件大小
+      max-request-size: 20MB
+  # 服务模块
+  devtools:
+    restart:
+      # 热部署开关
+      enabled: true
+# token配置
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+
+# MyBatisPlus配置
+mybatis-plus:
+  mapperLocations: classpath*:mapper/**/*Mapper.xml
+  # 自定义TypeHandler
+  type-handlers-package: com.waitxy.framework.config.typehandler
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.waitxy.**.domain,com.waitxy.**.entity
+  global-config:
+    #是否控制台
+    banner: false
+    db-config:
+      #主键类型
+      id-type: auto
+
+# PageHelper分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+# Swagger配置
+swagger:
+  # 是否开启swagger
+  enabled: true
+  # 请求前缀
+  pathMapping: /dev-api
+
+# 防止XSS攻击
+xss:
+  # 过滤开关
+  enabled: true
+  # 排除链接（多个用逗号分隔）
+  excludes: /system/notice/*
+  # 匹配链接
+  urlPatterns: /system/*,/monitor/*,/tool/*
+
+wx:
+  # 公众号配置
+  mp:
+    configs:
+      - appId: wxac701ad414ce114a
+        secret: 8e453486a311b658c1493882ee61627e
+        token: 4G1djittUlXUA3bFeZCMDFbYOFQNNq7a
+        aesKey: XHcggkR8UnNmJRfAlqrMg26XaZuFCgOgIZsdSfc9PQS
+  # 小程序配置
+  ma:
+    configs:
+      - appId: xxxxxxxxxxxxxxxx
+        secret: xxxxxxxxxxxxx
+        # 微信支付商户号，请去微信支付平台申请
+        mchId: 1588227511
+        # 微信支付商户密钥，请去微信支付平台申请
+        mchKey: xxxxxxxxxxxxxxxxxxxxx
+
+mall:
+  # 支付、物流回调地址，即后台服务7500端口的外网访问域名，要保证外网能访问
+  notify-host: http://xx.xxxx.com
